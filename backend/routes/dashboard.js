@@ -7,9 +7,11 @@ router.get('/', authenticateToken, async (req, res) => {
   try {
     const db = await getDb();
     
-    // Get current month prefix 'YYYY-MM'
+    // Get current month prefix 'YYYY-MM' in local timezone
     const today = new Date();
-    const currentMonthKey = today.toISOString().substring(0, 7); // 'YYYY-MM'
+    const currentYear = today.getFullYear();
+    const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+    const currentMonthKey = `${currentYear}-${currentMonth}`; // 'YYYY-MM'
 
     // 1. KPI - Total Revenue this month (sum of payments in payment_history)
     const monthlyRevenue = await db.get(
@@ -47,7 +49,9 @@ router.get('/', authenticateToken, async (req, res) => {
     for (let i = 5; i >= 0; i--) {
       const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
       const monthLabel = d.toLocaleString('default', { month: 'short', year: 'numeric' });
-      const monthPrefix = d.toISOString().substring(0, 7); // 'YYYY-MM'
+      const year = d.getFullYear();
+      const monthVal = String(d.getMonth() + 1).padStart(2, '0');
+      const monthPrefix = `${year}-${monthVal}`;
       months.push({ label: monthLabel, prefix: monthPrefix });
     }
 
