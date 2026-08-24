@@ -32,6 +32,16 @@ router.get('/', authenticateToken, async (req, res) => {
       "SELECT COUNT(*) as count FROM transactions WHERE status = 'overdue' AND is_archived = 0"
     );
 
+    // 4b. KPI - Total Government Fees (all active transactions)
+    const totalGovtFees = await db.get(
+      "SELECT COALESCE(SUM(govt_fees), 0) as total FROM transactions WHERE is_archived = 0"
+    );
+
+    // 4c. KPI - Total Professional Fees (all active transactions)
+    const totalProfFees = await db.get(
+      "SELECT COALESCE(SUM(prof_fees), 0) as total FROM transactions WHERE is_archived = 0"
+    );
+
     // 5. Monthly Revenue Trend (Last 6 Months)
     const months = [];
     for (let i = 5; i >= 0; i--) {
@@ -120,7 +130,9 @@ router.get('/', authenticateToken, async (req, res) => {
         total_revenue_this_month: monthlyRevenue.total,
         total_pending: totalPending.total,
         total_clients: activeClientsCount.count,
-        overdue_count: overdueCount.count
+        overdue_count: overdueCount.count,
+        total_govt_fees: totalGovtFees.total,
+        total_prof_fees: totalProfFees.total
       },
       revenue_trend: trend,
       status_breakdown: [

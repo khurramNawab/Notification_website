@@ -8,6 +8,8 @@ interface DashboardData {
     total_pending: number;
     total_clients: number;
     overdue_count: number;
+    total_govt_fees: number;
+    total_prof_fees: number;
   };
   revenue_trend: Array<{ month: string; amount: number }>;
   status_breakdown: Array<{ name: string; value: number; color: string }>;
@@ -17,6 +19,7 @@ interface DashboardData {
     upcoming: Array<any>;
   };
   recent_transactions: Array<any>;
+  upcoming_reminders: Array<any>;
 }
 
 interface DashboardProps {
@@ -173,6 +176,41 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchTerm, triggerNewPaym
             <div className="flex items-center gap-1">
               <span className="material-symbols-outlined text-xs text-error font-bold">schedule</span>
               <span className="text-xs text-error font-semibold">&gt; 30 days pending</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Second KPI Row: Govt Fees + Prof Fees */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          {/* Government Fee */}
+          <div className="bg-white p-5 rounded-xl shadow-sm border border-outline-variant/30 hover:border-outline-variant transition-colors relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-bl-full group-hover:bg-blue-500/10 transition-colors"></div>
+            <div className="flex justify-between items-start mb-4">
+              <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Total Govt. Fee</span>
+              <span className="material-symbols-outlined text-blue-600 bg-blue-50 p-1.5 rounded-lg text-lg">account_balance</span>
+            </div>
+            <div className="text-2xl font-bold text-on-surface mb-2 font-mono">
+              ₹{data.kpis.total_govt_fees.toLocaleString()}
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="material-symbols-outlined text-xs text-blue-600 font-bold">receipt_long</span>
+              <span className="text-xs text-blue-600 font-semibold">Government charges</span>
+            </div>
+          </div>
+
+          {/* Professional Fee */}
+          <div className="bg-white p-5 rounded-xl shadow-sm border border-outline-variant/30 hover:border-outline-variant transition-colors relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-violet-500/5 rounded-bl-full group-hover:bg-violet-500/10 transition-colors"></div>
+            <div className="flex justify-between items-start mb-4">
+              <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Total Prof. Fee</span>
+              <span className="material-symbols-outlined text-violet-600 bg-violet-50 p-1.5 rounded-lg text-lg">work</span>
+            </div>
+            <div className="text-2xl font-bold text-on-surface mb-2 font-mono">
+              ₹{data.kpis.total_prof_fees.toLocaleString()}
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="material-symbols-outlined text-xs text-violet-600 font-bold">person</span>
+              <span className="text-xs text-violet-600 font-semibold">Consultancy charges</span>
             </div>
           </div>
         </div>

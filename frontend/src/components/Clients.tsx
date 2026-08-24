@@ -211,7 +211,7 @@ export const Clients: React.FC<ClientsProps> = ({
                     <td colSpan={11} className="text-center py-12 text-on-surface-variant">No engagements found.</td>
                   </tr>
                 ) : (
-                  transactions.map((tx) => (
+                  transactions.map((tx, index) => (
                     <tr key={tx.id} className="hover:bg-teal-50/20 transition-colors">
                       <td className="py-3.5 px-4 font-mono text-on-surface-variant">{tx.date}</td>
                       <td className="py-3.5 px-4">
@@ -253,7 +253,11 @@ export const Clients: React.FC<ClientsProps> = ({
                         {activeMenuId === tx.id && (
                           <>
                             <div onClick={() => setActiveMenuId(null)} className="fixed inset-0 z-10" />
-                            <div className="absolute right-4 mt-1 bg-white rounded-lg shadow-level-2 border border-outline-variant/30 w-36 py-1 z-20 text-left">
+                            <div className={`absolute right-4 ${
+                              index >= transactions.length - 2 && transactions.length > 2
+                                ? 'bottom-full mb-1'
+                                : 'mt-1'
+                            } bg-white rounded-lg shadow-level-2 border border-outline-variant/30 w-36 py-1 z-20 text-left`}>
                               <button
                                 onClick={() => { openMarkPaidModal(tx.id); setActiveMenuId(null); }}
                                 className="w-full px-3 py-1.5 hover:bg-slate-50 text-left font-semibold text-on-surface flex items-center gap-1.5"
