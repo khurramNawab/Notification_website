@@ -100,8 +100,8 @@ export const NewEntryModal: React.FC<NewEntryModalProps> = ({
               customServiceType: cType,
               clientOrConsultant: tx.client_or_consultant,
               quotationAmount: tx.quotation_amount.toString(),
-              govtFees: tx.govt_fees.toString(),
-              profFees: tx.prof_fees.toString(),
+              govtFees: (tx.govt_fees || 0).toString(),
+              profFees: (tx.prof_fees || 0).toString(),
               advanceAmount: tx.advance_amount.toString(),
               remark: tx.remark || ''
             }
