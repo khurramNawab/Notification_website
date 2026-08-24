@@ -127,7 +127,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchTerm, triggerNewPaym
               <span className="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg text-lg">account_balance_wallet</span>
             </div>
             <div className="text-2xl font-bold text-on-surface mb-2 font-mono">
-              ₹{data.kpis.total_revenue_this_month.toLocaleString()}
+              ₹{(data.kpis.total_revenue_this_month || 0).toLocaleString()}
             </div>
             <div className="flex items-center gap-1">
               <span className="material-symbols-outlined text-xs text-primary font-bold">trending_up</span>
@@ -143,7 +143,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchTerm, triggerNewPaym
               <span className="material-symbols-outlined text-tertiary bg-tertiary/10 p-1.5 rounded-lg text-lg">pending_actions</span>
             </div>
             <div className="text-2xl font-bold text-on-surface mb-2 font-mono">
-              ₹{data.kpis.total_pending.toLocaleString()}
+              ₹{(data.kpis.total_pending || 0).toLocaleString()}
             </div>
             <div className="flex items-center gap-1">
               <span className="material-symbols-outlined text-xs text-tertiary font-bold">hourglass_empty</span>
@@ -158,7 +158,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchTerm, triggerNewPaym
               <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Total Clients</span>
               <span className="material-symbols-outlined text-secondary bg-secondary-container/30 p-1.5 rounded-lg text-lg">groups</span>
             </div>
-            <div className="text-2xl font-bold text-on-surface mb-2 font-mono">{data.kpis.total_clients}</div>
+            <div className="text-2xl font-bold text-on-surface mb-2 font-mono">{data.kpis.total_clients || 0}</div>
             <div className="flex items-center gap-1">
               <span className="material-symbols-outlined text-xs text-primary font-bold">check_circle</span>
               <span className="text-xs text-on-surface-variant">Active engagements</span>
@@ -172,7 +172,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchTerm, triggerNewPaym
               <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Overdue Accounts</span>
               <span className="material-symbols-outlined text-error bg-error-container/50 p-1.5 rounded-lg text-lg">warning</span>
             </div>
-            <div className="text-2xl font-bold text-error mb-2 font-mono">{data.kpis.overdue_count}</div>
+            <div className="text-2xl font-bold text-error mb-2 font-mono">{data.kpis.overdue_count || 0}</div>
             <div className="flex items-center gap-1">
               <span className="material-symbols-outlined text-xs text-error font-bold">schedule</span>
               <span className="text-xs text-error font-semibold">&gt; 30 days pending</span>
@@ -190,7 +190,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchTerm, triggerNewPaym
               <span className="material-symbols-outlined text-blue-600 bg-blue-50 p-1.5 rounded-lg text-lg">account_balance</span>
             </div>
             <div className="text-2xl font-bold text-on-surface mb-2 font-mono">
-              ₹{data.kpis.total_govt_fees.toLocaleString()}
+              ₹{(data.kpis.total_govt_fees || 0).toLocaleString()}
             </div>
             <div className="flex items-center gap-1">
               <span className="material-symbols-outlined text-xs text-blue-600 font-bold">receipt_long</span>
@@ -206,7 +206,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchTerm, triggerNewPaym
               <span className="material-symbols-outlined text-violet-600 bg-violet-50 p-1.5 rounded-lg text-lg">work</span>
             </div>
             <div className="text-2xl font-bold text-on-surface mb-2 font-mono">
-              ₹{data.kpis.total_prof_fees.toLocaleString()}
+              ₹{(data.kpis.total_prof_fees || 0).toLocaleString()}
             </div>
             <div className="flex items-center gap-1">
               <span className="material-symbols-outlined text-xs text-violet-600 font-bold">person</span>
