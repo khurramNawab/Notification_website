@@ -1,5 +1,4 @@
 const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
 const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 
@@ -18,8 +17,16 @@ function convertQuery(sql) {
   return pgSql;
 }
 
-// SQLite wrapper function
+// SQLite wrapper function (lazy-loads sqlite3 on demand)
 function initSqliteDb() {
+  let sqlite3;
+  try {
+    sqlite3 = require('sqlite3').verbose();
+  } catch (err) {
+    console.error('[DATABASE] Failed to load native sqlite3 driver:', err.message);
+    throw new Error('SQLite driver not supported in this runtime environment. Please provide a DATABASE_URL for Postgres.');
+  }
+
   const dbPath = path.resolve(__dirname, 'paytrack.db');
   console.log(`[DATABASE] Connecting to local SQLite database at: ${dbPath}`);
   const db = new sqlite3.Database(dbPath);
