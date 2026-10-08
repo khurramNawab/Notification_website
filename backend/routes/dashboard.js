@@ -85,10 +85,11 @@ router.get('/', authenticateToken, async (req, res) => {
       statuses[row.status] = row.count;
     });
 
-    // 7. Follow-up lists (Outstanding payments grouped by age)
-    // Overdue: Age > 30 days
-    // Due This Week: Age between 24 and 30 days
-    // Upcoming: Age < 24 days
+    // 7. Follow-up lists (Outstanding payments dynamically grouped by age and settings threshold)
+    const overdueSetting = await db.get("SELECT value FROM settings WHERE key = 'overdue_days_threshold'");
+    const threshold = parseInt(overdueSetting ? overdueSetting.value : '30') || 30;
+    const dueThisWeekThreshold = Math.max(1, threshold - 7);
+
     const activeTxs = await db.all(
       `SELECT t.*, c.company_name, c.client_name, c.phone_number 
        FROM transactions t
@@ -107,12 +108,18 @@ router.get('/', authenticateToken, async (req, res) => {
       const txDate = new Date(tx.date);
       const diffTime = today - txDate;
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const daysLeft = Math.max(0, threshold - diffDays);
 
-      const txWithAge = { ...tx, age_days: diffDays };
+      const txWithAge = { 
+        ...tx, 
+        age_days: diffDays,
+        days_left: daysLeft,
+        threshold: threshold
+      };
 
-      if (diffDays > 30) {
+      if (diffDays > threshold) {
         followUps.overdue.push(txWithAge);
-      } else if (diffDays >= 24) {
+      } else if (diffDays >= dueThisWeekThreshold) {
         followUps.due_this_week.push(txWithAge);
       } else {
         followUps.upcoming.push(txWithAge);

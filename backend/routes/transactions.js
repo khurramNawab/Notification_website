@@ -142,7 +142,12 @@ router.get('/', authenticateToken, async (req, res) => {
       countParams.push(status);
     }
 
-    if (date_start && date_end) {
+    if (req.query.date) {
+      query += ` AND t.date = ?`;
+      countQuery += ` AND t.date = ?`;
+      params.push(req.query.date);
+      countParams.push(req.query.date);
+    } else if (date_start && date_end) {
       query += ` AND t.date BETWEEN ? AND ?`;
       countQuery += ` AND t.date BETWEEN ? AND ?`;
       params.push(date_start, date_end);
@@ -515,46 +520,190 @@ router.get('/:id/invoice', authenticateToken, async (req, res) => {
   }
 });
 
-// Export transactions to Excel matching CA Firm sheet column order
-router.get('/export', authenticateToken, async (req, res) => {
+// Get Monthly Report & Analytics for a specific month (or default current month)
+router.get('/monthly-report', authenticateToken, async (req, res) => {
   try {
     const db = await getDb();
     
-    // Fetch all active transactions
-    const rows = await db.all(
+    // Default to current month YYYY-MM in local time
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonthNum = String(today.getMonth() + 1).padStart(2, '0');
+    const defaultMonth = `${currentYear}-${currentMonthNum}`;
+    
+    const selectedMonth = req.query.month || defaultMonth; // 'YYYY-MM'
+
+    // 1. Get all transactions for selected month
+    const transactions = await db.all(
       `SELECT t.*, c.company_name, c.client_name, c.phone_number 
        FROM transactions t
        JOIN clients c ON t.client_id = c.id
-       WHERE t.is_archived = 0 AND c.is_archived = 0
-       ORDER BY t.date DESC`
+       WHERE t.date LIKE ? AND t.is_archived = 0 AND c.is_archived = 0
+       ORDER BY t.date DESC, t.id DESC`,
+      [`${selectedMonth}%`]
     );
 
+    // 2. Aggregate monthly KPIs
+    let totalQuotation = 0;
+    let totalGovtFees = 0;
+    let totalProfFees = 0;
+    let totalAdvance = 0;
+    let totalPaymentReceived = 0;
+    let totalPending = 0;
+
+    let completeCount = 0;
+    let partialCount = 0;
+    let pendingCount = 0;
+    let overdueCount = 0;
+
+    transactions.forEach(t => {
+      totalQuotation += parseFloat(t.quotation_amount) || 0;
+      totalGovtFees += parseFloat(t.govt_fees) || 0;
+      totalProfFees += parseFloat(t.prof_fees) || 0;
+      totalAdvance += parseFloat(t.advance_amount) || 0;
+      totalPaymentReceived += parseFloat(t.payment_received) || 0;
+      totalPending += parseFloat(t.pending_amount) || 0;
+
+      if (t.status === 'complete') completeCount++;
+      else if (t.status === 'partial') partialCount++;
+      else if (t.status === 'overdue') overdueCount++;
+      else pendingCount++;
+    });
+
+    // 3. Get all available months from active transactions for the dropdown
+    const availableMonthsRows = await db.all(
+      `SELECT DISTINCT SUBSTR(date, 1, 7) as month_key 
+       FROM transactions 
+       WHERE is_archived = 0 AND date IS NOT NULL AND LENGTH(date) >= 7
+       ORDER BY month_key DESC`
+    );
+
+    const availableMonthsSet = new Set(availableMonthsRows.map(r => r.month_key).filter(Boolean));
+    availableMonthsSet.add(defaultMonth);
+    const availableMonths = Array.from(availableMonthsSet).sort().reverse();
+
+    res.json({
+      month: selectedMonth,
+      current_month: defaultMonth,
+      kpis: {
+        total_entries: transactions.length,
+        total_quotation: totalQuotation,
+        total_govt_fees: totalGovtFees,
+        total_prof_fees: totalProfFees,
+        total_advance: totalAdvance,
+        total_payment_received: totalPaymentReceived,
+        total_pending: totalPending,
+        complete_count: completeCount,
+        partial_count: partialCount,
+        pending_count: pendingCount,
+        overdue_count: overdueCount
+      },
+      transactions,
+      available_months: availableMonths
+    });
+  } catch (err) {
+    console.error('Failed to get monthly report:', err);
+    res.status(500).json({ error: 'Failed to generate monthly report' });
+  }
+});
+
+// Export transactions to Excel matching CA Firm sheet column order (Supports optional ?month=YYYY-MM)
+router.get('/export', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDb();
+    const { month } = req.query; // 'YYYY-MM' or undefined / 'all'
+    
+    let query = `
+      SELECT t.*, c.company_name, c.client_name, c.phone_number 
+      FROM transactions t
+      JOIN clients c ON t.client_id = c.id
+      WHERE t.is_archived = 0 AND c.is_archived = 0
+    `;
+    const params = [];
+
+    if (month && month !== 'all') {
+      query += ` AND t.date LIKE ?`;
+      params.push(`${month}%`);
+    }
+
+    query += ` ORDER BY t.date DESC, t.id DESC`;
+
+    const rows = await db.all(query, params);
+
     // Map rows to Excel structure
-    // Date, Company Name, Client Name, Number, Service, Client/Cons, Quotation, Govt Fees, Prof Fees, Advance, Pending Amount, Payment Received, Remark
-    const excelRows = rows.map(r => ({
-      'Date': r.date,
-      'Company Name': r.company_name,
-      'Client Name': r.client_name,
-      'Number': r.phone_number,
-      'Service': r.service_type,
-      'Client/Cons': r.client_or_consultant,
-      'Quotation': r.quotation_amount,
-      'Govt Fees': r.govt_fees,
-      'Prof Fees': r.prof_fees,
-      'Advance': r.advance_amount,
-      'Pending Amount': r.pending_amount,
-      'Payment Received': r.payment_received,
-      'Remark': r.remark
-    }));
+    let totalQuotation = 0;
+    let totalGovtFees = 0;
+    let totalProfFees = 0;
+    let totalAdvance = 0;
+    let totalPending = 0;
+    let totalReceived = 0;
+
+    const excelRows = rows.map(r => {
+      const q = parseFloat(r.quotation_amount) || 0;
+      const g = parseFloat(r.govt_fees) || 0;
+      const p = parseFloat(r.prof_fees) || 0;
+      const a = parseFloat(r.advance_amount) || 0;
+      const pen = parseFloat(r.pending_amount) || 0;
+      const rec = parseFloat(r.payment_received) || 0;
+
+      totalQuotation += q;
+      totalGovtFees += g;
+      totalProfFees += p;
+      totalAdvance += a;
+      totalPending += pen;
+      totalReceived += rec;
+
+      return {
+        'Date': r.date,
+        'Company Name': r.company_name,
+        'Client Name': r.client_name,
+        'Number': r.phone_number || '',
+        'Service': r.service_type,
+        'Client/Cons': r.client_or_consultant,
+        'Quotation': q,
+        'Govt Fees': g,
+        'Prof Fees': p,
+        'Advance': a,
+        'Pending Amount': pen,
+        'Payment Received': rec,
+        'Status': r.status,
+        'Remark': r.remark || ''
+      };
+    });
+
+    // Append Summary Totals Row at the bottom
+    if (excelRows.length > 0) {
+      excelRows.push({
+        'Date': 'TOTAL',
+        'Company Name': `Total Entries: ${rows.length}`,
+        'Client Name': '',
+        'Number': '',
+        'Service': '',
+        'Client/Cons': '',
+        'Quotation': totalQuotation,
+        'Govt Fees': totalGovtFees,
+        'Prof Fees': totalProfFees,
+        'Advance': totalAdvance,
+        'Pending Amount': totalPending,
+        'Payment Received': totalReceived,
+        'Status': '',
+        'Remark': 'Summary Row'
+      });
+    }
 
     const worksheet = xlsx.utils.json_to_sheet(excelRows);
     const workbook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(workbook, worksheet, 'Transactions');
+    const sheetName = month && month !== 'all' ? `Report_${month}` : 'All_Transactions';
+    xlsx.utils.book_append_sheet(workbook, worksheet, sheetName.substring(0, 31));
 
     const buffer = xlsx.write(workbook, { type: 'buffer', bookType: 'xlsx' });
 
+    const fileName = month && month !== 'all' 
+      ? `PayTrack_Monthly_Report_${month}.xlsx` 
+      : 'PayTrack_CRM_Ledger_All.xlsx';
+
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', 'attachment; filename=Transactions_Export.xlsx');
+    res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
     res.send(buffer);
   } catch (err) {
     console.error('Export error:', err);
@@ -774,6 +923,36 @@ router.post('/:id/reminders', authenticateToken, async (req, res) => {
     res.json({ message: 'Reminder triggered and logged successfully' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to record reminder' });
+  }
+});
+
+// Bulk trigger and log follow-up reminders
+router.post('/reminders/bulk', authenticateToken, async (req, res) => {
+  const { transaction_ids, channel } = req.body;
+  if (!transaction_ids || !Array.isArray(transaction_ids) || transaction_ids.length === 0) {
+    return res.status(400).json({ error: 'Transaction IDs array required' });
+  }
+
+  const selectedChannel = channel || 'whatsapp';
+  const reminderDate = new Date().toISOString().split('T')[0];
+
+  try {
+    const db = await getDb();
+    let sentCount = 0;
+
+    for (const txId of transaction_ids) {
+      await db.run(
+        `INSERT INTO reminders (transaction_id, reminder_date, status, channel)
+         VALUES (?, ?, 'sent', ?)`,
+        [txId, reminderDate, selectedChannel]
+      );
+      sentCount++;
+    }
+
+    res.json({ message: `Successfully logged ${sentCount} reminders`, count: sentCount });
+  } catch (err) {
+    console.error('Failed to log bulk reminders:', err);
+    res.status(500).json({ error: 'Failed to process bulk reminders' });
   }
 });
 

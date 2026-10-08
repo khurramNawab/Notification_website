@@ -34,7 +34,7 @@ export const Login: React.FC = () => {
   const fillCredentials = (role: 'admin' | 'staff') => {
     if (role === 'admin') {
       setEmail('admin@paytrack.com');
-      setPassword('admin123');
+      setPassword('Admin@741');
     } else {
       setEmail('staff@paytrack.com');
       setPassword('staff123');

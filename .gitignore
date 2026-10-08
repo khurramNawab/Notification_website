@@ -1,8 +1,51 @@
+# Dependencies
 node_modules/
+*/node_modules/
+
+# Environment and Credentials (CRITICAL - NEVER COMMIT)
 .env
+.env.*
+*.env
+!.env.example
+!*/.env.example
 .env.local
 .env.development
+.env.test
+.env.production
+
+# Database Files
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
 paytrack.db
 paytrack.db-journal
+backend/paytrack.db
+backend/paytrack.db-journal
+
+# Production Builds
+dist/
 frontend/dist/
+dist-ssr/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS & Editor files
 .DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

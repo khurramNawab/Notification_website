@@ -55,6 +55,6 @@ app.get('*', (req, res, next) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`PayTrack CRM backend running on port ${PORT}`);
 });

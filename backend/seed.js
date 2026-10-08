@@ -19,7 +19,7 @@ async function seed() {
   await db.run("INSERT INTO settings (key, value) VALUES ('overdue_days_threshold', '30')");
 
   // Seed Users
-  const adminHash = await bcrypt.hash('admin123', 10);
+  const adminHash = await bcrypt.hash('Admin@741', 10);
   const staffHash = await bcrypt.hash('staff123', 10);
 
   await db.run(
