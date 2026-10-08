@@ -37,21 +37,38 @@ app.use('/api/transactions', transactionsRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/settings', settingsRouter);
 
-// Serve Static Assets from React build
+// Serve Static Assets from React build (if built)
+const fs = require('fs');
 const path = require('path');
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+const frontendIndexPath = path.join(frontendDistPath, 'index.html');
+
+if (fs.existsSync(frontendIndexPath)) {
+  app.use(express.static(frontendDistPath));
+}
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
 
-// Fallback all non-API GET requests to React index.html
+// Root endpoint
+app.get('/', (req, res) => {
+  if (fs.existsSync(frontendIndexPath)) {
+    return res.sendFile(frontendIndexPath);
+  }
+  res.json({ name: 'PayTrack CRM Backend API', status: 'OK', message: 'Backend is running live' });
+});
+
+// Fallback all non-API GET requests to React index.html or API response
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api')) {
     return next();
   }
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  if (fs.existsSync(frontendIndexPath)) {
+    return res.sendFile(frontendIndexPath);
+  }
+  res.json({ name: 'PayTrack CRM Backend API', status: 'OK' });
 });
 
 // Start Server
