@@ -1,0 +1,516 @@
+{
+  "users": [
+    {
+      "id": 5,
+      "name": "Admin User",
+      "email": "admin@paytrack.com",
+      "password_hash": "$2a$10$FMVedmfS/Aa7x85lIMuc2.o9i0oNMt0djB4Yu2u1MYd82zf8iHRIG",
+      "role": "admin",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 6,
+      "name": "Staff User",
+      "email": "staff@paytrack.com",
+      "password_hash": "$2a$10$ig8YfdaBbHByv5EJYUQDTuC5srSdt/vnZvaV6LKxO5EGUvPJ9nHES",
+      "role": "staff",
+      "created_at": "2026-10-08 11:51:43"
+    }
+  ],
+  "transactions": [
+    {
+      "id": 19,
+      "client_id": 18,
+      "date": "2026-09-28",
+      "service_type": "GST Audit",
+      "client_or_consultant": "client",
+      "quotation_amount": 45000,
+      "govt_fees": 20000,
+      "prof_fees": 25000,
+      "advance_amount": 10000,
+      "payment_received": 0,
+      "pending_amount": 35000,
+      "status": "partial",
+      "remark": "Advance received, drafting audit report",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 20,
+      "client_id": 22,
+      "date": "2026-09-16",
+      "service_type": "Income Tax",
+      "client_or_consultant": "client",
+      "quotation_amount": 15500,
+      "govt_fees": 0,
+      "prof_fees": 15500,
+      "advance_amount": 15500,
+      "payment_received": 0,
+      "pending_amount": 0,
+      "status": "complete",
+      "remark": "Full fee paid upfront",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 21,
+      "client_id": 23,
+      "date": "2026-08-24",
+      "service_type": "ROC Filing",
+      "client_or_consultant": "consultant",
+      "quotation_amount": 8000,
+      "govt_fees": 3000,
+      "prof_fees": 5000,
+      "advance_amount": 0,
+      "payment_received": 0,
+      "pending_amount": 8000,
+      "status": "overdue",
+      "remark": "Follow up required for full payment",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 22,
+      "client_id": 24,
+      "date": "2026-09-20",
+      "service_type": "Audit",
+      "client_or_consultant": "client",
+      "quotation_amount": 120000,
+      "govt_fees": 20000,
+      "prof_fees": 100000,
+      "advance_amount": 0,
+      "payment_received": 0,
+      "pending_amount": 120000,
+      "status": "pending",
+      "remark": "Filing pending approval",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 23,
+      "client_id": 25,
+      "date": "2026-10-03",
+      "service_type": "GST Returns",
+      "client_or_consultant": "client",
+      "quotation_amount": 12000,
+      "govt_fees": 0,
+      "prof_fees": 12000,
+      "advance_amount": 12000,
+      "payment_received": 0,
+      "pending_amount": 0,
+      "status": "complete",
+      "remark": "Filing complete",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 24,
+      "client_id": 26,
+      "date": "2026-09-26",
+      "service_type": "Income Tax",
+      "client_or_consultant": "client",
+      "quotation_amount": 35000,
+      "govt_fees": 0,
+      "prof_fees": 35000,
+      "advance_amount": 20000,
+      "payment_received": 5000,
+      "pending_amount": 10000,
+      "status": "partial",
+      "remark": "Filing completed, waiting for final balance",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 25,
+      "client_id": 27,
+      "date": "2026-08-19",
+      "service_type": "Audit",
+      "client_or_consultant": "client",
+      "quotation_amount": 85000,
+      "govt_fees": 0,
+      "prof_fees": 85000,
+      "advance_amount": 0,
+      "payment_received": 0,
+      "pending_amount": 85000,
+      "status": "overdue",
+      "remark": "Invoice sent, client checking accounts",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 26,
+      "client_id": 28,
+      "date": "2026-09-30",
+      "service_type": "ROC Filing",
+      "client_or_consultant": "client",
+      "quotation_amount": 6500,
+      "govt_fees": 2500,
+      "prof_fees": 4000,
+      "advance_amount": 6500,
+      "payment_received": 0,
+      "pending_amount": 0,
+      "status": "complete",
+      "remark": "Annual return successfully filed",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 27,
+      "client_id": 29,
+      "date": "2026-09-23",
+      "service_type": "GST Reg.",
+      "client_or_consultant": "client",
+      "quotation_amount": 5000,
+      "govt_fees": 1500,
+      "prof_fees": 3500,
+      "advance_amount": 0,
+      "payment_received": 0,
+      "pending_amount": 5000,
+      "status": "pending",
+      "remark": "Application uploaded, waiting for registration copy",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 28,
+      "client_id": 30,
+      "date": "2026-08-29",
+      "service_type": "Audit",
+      "client_or_consultant": "client",
+      "quotation_amount": 45000,
+      "govt_fees": 0,
+      "prof_fees": 45000,
+      "advance_amount": 25000,
+      "payment_received": 0,
+      "pending_amount": 20000,
+      "status": "overdue",
+      "remark": "Draft report sent. Follow up needed for balance.",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 29,
+      "client_id": 19,
+      "date": "2026-09-06",
+      "service_type": "Audit",
+      "client_or_consultant": "client",
+      "quotation_amount": 150000,
+      "govt_fees": 0,
+      "prof_fees": 150000,
+      "advance_amount": 50000,
+      "payment_received": 0,
+      "pending_amount": 100000,
+      "status": "overdue",
+      "remark": "Consultation over, balance outstanding",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43",
+      "updated_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 30,
+      "client_id": 20,
+      "date": "2026-10-06",
+      "service_type": "GST Returns",
+      "client_or_consultant": "client",
+      "quotation_amount": 320000,
+      "govt_fees": 20000,
+      "prof_fees": 300000,
+      "advance_amount": 0,
+      "payment_received": 0,
+      "pending_amount": 320000,
+      "status": "pending",
+      "remark": "Quarterly filing started",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:44",
+      "updated_at": "2026-10-08 11:51:44"
+    },
+    {
+      "id": 31,
+      "client_id": 21,
+      "date": "2026-09-28",
+      "service_type": "Consulting",
+      "client_or_consultant": "client",
+      "quotation_amount": 45000,
+      "govt_fees": 0,
+      "prof_fees": 45000,
+      "advance_amount": 0,
+      "payment_received": 0,
+      "pending_amount": 45000,
+      "status": "pending",
+      "remark": "Drafting agreements",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:44",
+      "updated_at": "2026-10-08 11:51:44"
+    }
+  ],
+  "payment_history": [
+    {
+      "id": 14,
+      "transaction_id": 19,
+      "amount": 10000,
+      "payment_date": "2026-09-28",
+      "payment_mode": "bank",
+      "note": "Advance Payment Logged",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 15,
+      "transaction_id": 20,
+      "amount": 15500,
+      "payment_date": "2026-09-16",
+      "payment_mode": "bank",
+      "note": "Advance Payment Logged",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 16,
+      "transaction_id": 23,
+      "amount": 12000,
+      "payment_date": "2026-10-03",
+      "payment_mode": "bank",
+      "note": "Advance Payment Logged",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 17,
+      "transaction_id": 24,
+      "amount": 20000,
+      "payment_date": "2026-09-26",
+      "payment_mode": "bank",
+      "note": "Advance Payment Logged",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 18,
+      "transaction_id": 26,
+      "amount": 6500,
+      "payment_date": "2026-09-30",
+      "payment_mode": "bank",
+      "note": "Advance Payment Logged",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 19,
+      "transaction_id": 28,
+      "amount": 25000,
+      "payment_date": "2026-08-29",
+      "payment_mode": "bank",
+      "note": "Advance Payment Logged",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 20,
+      "transaction_id": 29,
+      "amount": 50000,
+      "payment_date": "2026-09-06",
+      "payment_mode": "bank",
+      "note": "Advance Payment Logged",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 21,
+      "transaction_id": 24,
+      "amount": 5000,
+      "payment_date": "2026-10-06",
+      "payment_mode": "UPI",
+      "note": "Second installment received",
+      "created_at": "2026-10-08 11:51:44"
+    }
+  ],
+  "clients": [
+    {
+      "id": 18,
+      "company_name": "Acme Corp Ltd.",
+      "client_name": "John Doe",
+      "phone_number": "+91 98765 43210",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 19,
+      "company_name": "Stark Industries",
+      "client_name": "Pepper Potts",
+      "phone_number": "+91 91234 56789",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 20,
+      "company_name": "Wayne Enterprises",
+      "client_name": "Lucius Fox",
+      "phone_number": "+91 92233 44556",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 21,
+      "company_name": "LexCorp",
+      "client_name": "Mercy Graves",
+      "phone_number": "+91 93344 55667",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 22,
+      "company_name": "TechVision Inc.",
+      "client_name": "Sarah Smith",
+      "phone_number": "+91 94455 66778",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 23,
+      "company_name": "Global Logistics",
+      "client_name": "Mike Johnson",
+      "phone_number": "+91 95566 77889",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 24,
+      "company_name": "Pioneer Retail",
+      "client_name": "Emily Chen",
+      "phone_number": "+91 96677 88990",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 25,
+      "company_name": "Sunrise Exports",
+      "client_name": "Raj Patel",
+      "phone_number": "+91 97788 99001",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 26,
+      "company_name": "Apex Builders",
+      "client_name": "Lisa Wong",
+      "phone_number": "+91 98899 00112",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 27,
+      "company_name": "Zenith Healthcare",
+      "client_name": "Dr. Ahmed",
+      "phone_number": "+91 99900 11223",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 28,
+      "company_name": "BlueWave Tech",
+      "client_name": "Simon Clark",
+      "phone_number": "+91 90011 22334",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 29,
+      "company_name": "Nexa Design",
+      "client_name": "Anna Lee",
+      "phone_number": "+91 91122 33445",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 30,
+      "company_name": "Urban Foods",
+      "client_name": "David Kim",
+      "phone_number": "+91 92233 44556",
+      "is_archived": 0,
+      "created_at": "2026-10-08 11:51:43"
+    }
+  ],
+  "reminders": [
+    {
+      "id": 15,
+      "transaction_id": 21,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 16,
+      "transaction_id": 22,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 17,
+      "transaction_id": 25,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 18,
+      "transaction_id": 27,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 19,
+      "transaction_id": 28,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:43"
+    },
+    {
+      "id": 20,
+      "transaction_id": 29,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:44"
+    },
+    {
+      "id": 21,
+      "transaction_id": 30,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:44"
+    },
+    {
+      "id": 22,
+      "transaction_id": 31,
+      "reminder_date": "2026-10-07",
+      "status": "pending",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 11:51:44"
+    },
+    {
+      "id": 23,
+      "transaction_id": 25,
+      "reminder_date": "2026-10-08",
+      "status": "sent",
+      "channel": "whatsapp",
+      "created_at": "2026-10-08 12:09:02"
+    }
+  ],
+  "settings": [
+    {
+      "key": "overdue_days_threshold",
+      "value": "30"
+    }
+  ]
+}

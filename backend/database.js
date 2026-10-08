@@ -42,6 +42,33 @@ function initPureJsDb() {
     }
   }
 
+  // Auto-seed existing data if store is empty
+  const seedPath = path.resolve(__dirname, 'seed_data.json');
+  if ((!data.clients || data.clients.length === 0) && fs.existsSync(seedPath)) {
+    try {
+      const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
+      if (seed.clients && seed.clients.length > 0) {
+        data.users = seed.users || data.users;
+        data.clients = seed.clients || [];
+        data.transactions = seed.transactions || [];
+        data.payment_history = seed.payment_history || [];
+        data.reminders = seed.reminders || [];
+        if (seed.settings && Array.isArray(seed.settings)) {
+          seed.settings.forEach(s => { if (s.key && s.value) data.settings[s.key] = s.value; });
+        }
+        // Update counters
+        data.counters.users = Math.max(0, ...data.users.map(u => u.id || 0));
+        data.counters.clients = Math.max(0, ...data.clients.map(c => c.id || 0));
+        data.counters.transactions = Math.max(0, ...data.transactions.map(t => t.id || 0));
+        data.counters.payment_history = Math.max(0, ...data.payment_history.map(p => p.id || 0));
+        data.counters.reminders = Math.max(0, ...data.reminders.map(r => r.id || 0));
+        console.log(`[DATABASE] Loaded ${data.clients.length} clients and ${data.transactions.length} transactions from seed_data.json`);
+      }
+    } catch (seedErr) {
+      console.warn('[DATABASE] Failed to load seed_data.json:', seedErr.message);
+    }
+  }
+
   const saveData = () => {
     try {
       fs.writeFileSync(storePath, JSON.stringify(data, null, 2), 'utf8');

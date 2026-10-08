@@ -8,4 +8,5 @@ node_modules/
 *.sqlite
 paytrack.db
 paytrack.db-journal
+paytrack_store.json
 *.log

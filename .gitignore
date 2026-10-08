@@ -22,6 +22,8 @@ paytrack.db
 paytrack.db-journal
 backend/paytrack.db
 backend/paytrack.db-journal
+paytrack_store.json
+backend/paytrack_store.json
 
 # Production Builds
 dist/
